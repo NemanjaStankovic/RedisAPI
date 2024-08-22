@@ -62,7 +62,7 @@ namespace RedisAPI.Controllers
             }
         }
 
-        [Route("postojiIgrica/{id}")]
+        [Route("postojiIgrica/{id}")]//id:2
         [HttpGet]
         public ActionResult postojiIgrica(string id)
         {

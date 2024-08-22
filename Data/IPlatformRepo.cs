@@ -4,7 +4,7 @@ namespace RedisAPI.Data
 {
     public interface IPlatformRepo
     {
-        void CreatePlatfrom();
+        void CreatePlatfrom();//bitna
 
         IEnumerable<Igrica?>? preuzmiSveIgrice();
 
@@ -12,9 +12,9 @@ namespace RedisAPI.Data
 
         IEnumerable<Igrica?>? preuzmiOmiljeneIgrice(string[] wishlist);
 
-        void unsubscribeAll();
+        void unsubscribeAll();//ova
 
-        void SendSaleNotificationsAsync();
+        void SendSaleNotificationsAsync();//ova
 
         bool postojiIgrica(string id, string username);
     }

@@ -21,11 +21,10 @@ public class BackgroundService : IHostedService
 
         _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromSeconds(30));
 
-        _timer2 = new Timer(DoWork2, null, TimeSpan.FromSeconds(45), TimeSpan.FromSeconds(60));
+        _timer2 = new Timer(DoWork2, null, TimeSpan.FromSeconds(15), TimeSpan.FromSeconds(30));
 
         return Task.CompletedTask;
-        //0,30,60,90,120,150
-        //45,105,165
+        
     }
 
     private void DoWork(object? state)

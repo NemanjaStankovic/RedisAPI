@@ -27,6 +27,7 @@ namespace RedisAPI
         }
         public void CreatePlatfrom()
         {
+            SendSaleNotificationsAsync();
 
             IDatabase db = _redis.GetDatabase();
 
@@ -45,26 +46,30 @@ namespace RedisAPI
                 string onSale = igrica.onSale.ToString();
                 string novaCena = igrica.novaCena.ToString();
                 
-
+                // nestooo:ID  
                 if (db.HashExists("id:" + id, "naziv"))
                 {
 
-                    _redis.GetSubscriber().Publish("id:" + id, $"{id}");
+                    _redis.GetSubscriber().Publish("id:" + id, $"{id}");//u tubu
                 
 
                     db.HashSet("id:" + id, new HashEntry[] { new HashEntry("sale", $"{onSale}"), new HashEntry("novaCena", $"{novaCena}") } );
-
                     
                 }
-                else{
+                else{//puni redis kes bazu
 
                     db.HashSet("id:" + id,new HashEntry [] {new HashEntry("naziv", $"{naziv}"), new HashEntry("cena", $"{cena}"), new HashEntry("sale", $"{onSale}"), new HashEntry("novaCena", $"{novaCena}")});
                 
                 }
+                //id:1  publish    1-------------------
+                //id:2  publish   2-------------------- 
+                //id:3  publish   3--------------------
+                  
             }
 
-            SendSaleNotificationsAsync();//User = Nedza
-            
+            //SendSaleNotificationsAsync();//User = Nedza
+            //odradi1 0 30 60 90 120 tu: 0 30 60 90 120 puni tubu
+            //odradi2 p                   15 45 75 105 prazni tubu
         }
 
 
@@ -135,12 +140,12 @@ namespace RedisAPI
             RedisKey[] keys = _redis.GetServer(endPoint).Keys(pattern: "id:*").ToArray();
 
 
-            foreach (var key in keys)
+            foreach (var key in keys)//key = id:1
             {
             
                 string pom = key.ToString();
-
-                string[] parts = pom.Split(':');
+                //id:2
+                string[] parts = pom.Split(':');//id:1 -> part[0] = id, part[1] = 1
 
                 if(parts[1] == id)
                 {
@@ -207,17 +212,21 @@ namespace RedisAPI
         
         public void SendSaleNotificationsAsync()
         {
-            var igriceOnSale = _context.Igrice.Where(i => i.onSale).ToList();
+            var igriceOnSale = _context.Igrice.Where(i => i.onSale).ToList();//1,3
 
-            var pubsub = _redis.GetSubscriber();
+            var pubsub = _redis.GetSubscriber();//uzima subsciber operatera
 
-            foreach (var igra in igriceOnSale)
+            foreach (var igra in igriceOnSale)//1,3
             {
                 pubsub.Subscribe("id:" + igra.Id, (channel, message) =>
                 {
                     _hubContext.Clients.All.SendAsync("ReceiveMessage", message.ToString());
                 });
             }
+            
+                //id:1   1------------------- subscribe -->1
+                
+                //id:3   3-------------------- subscribe -->3
         }
     }
 }

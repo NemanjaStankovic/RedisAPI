@@ -33,7 +33,7 @@ function makenotify(message, count) {
             notify.removeChild(notify.firstChild);
         }
     }
-        
+    //id:2
         
     fetch("https://localhost:7051/Publisher/postojiIgrica/"+message)
     .then(response => response.json())
@@ -62,22 +62,26 @@ let m = ""
 connection.on("ReceiveMessage", (message) => {
      
     makenotify(message, counter1);
-    
     counter1++;
     
 });
 
-
+//notification:0
 let notification = `    <div id="notification:$counter1$" class="toastNotifikacija show" role="alert" aria-live="assertive" aria-atomic="true">
                         <div class="toast-header">
                             <strong class="me-auto">Obavestenje</strong>
                             <small>$time$</small>
-                            <button type="button" class="btn-close" data-bs-dismiss="toast">
+                            <button type="button" id="button:$counter1$" class="btn-close">
                         </div>
                         <div class="toast-body">
                             $message$
                         </div>
                     </div>`
+
+var closeBtn = document.getElementById("button:$counter1$");
+closeBtn.onclick() = function () {
+
+}
 
 function makeNotification(counter1, message) {
     var today = new Date();
@@ -86,5 +90,26 @@ function makeNotification(counter1, message) {
         .replace("$time$", time)
         .replace("$message$", message)
 
+        
     return result;
+}
+
+
+let closeButton = document.getElementById(`button:${counter1}`);
+if (closeButton) {
+    closeButton.onclick = function() {
+        removeNotification(counter1);
+    };
+} else {
+    console.error(`Button with id button:${counter1} not found.`);
+}
+
+
+function removeNotification(counter1) {
+    let notificationElement = document.getElementById(`notification:${counter1}`);
+    if (notificationElement) {
+        notificationElement.remove();
+    } else {
+        console.error(`Notification with id notification:${counter1} not found.`);
+    }
 }
