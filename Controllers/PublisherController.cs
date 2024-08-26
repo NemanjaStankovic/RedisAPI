@@ -75,7 +75,7 @@ namespace RedisAPI.Controllers
             return Ok(pom);
         }
 
-        [Route("addToWishlist/{igrica}/{username}")]
+        [Route("addToWishlist/{igrica}/{username}")] 
         [HttpPost]
         public async Task<ActionResult> addToWishlist(string igrica, string username)
         {

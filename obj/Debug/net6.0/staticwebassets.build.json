@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "GlGCYk3j3MsrxLYyMEIuLR1pLZeS6DV4PUhyLWhffqU=",
+  "Hash": "yD1HNLxaeTjl66g4GaaVSbt3N4s+rF2R+ixihTxslsQ=",
   "Source": "RedisAPI",
   "BasePath": "_content/RedisAPI",
   "Mode": "Default",
@@ -66,6 +66,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\index.html"
+    },
+    {
+      "Identity": "D:\\faks\\cetvrta godina\\nbp\\rediproj\\RedisAPI\\wwwroot\\js\\admin.js",
+      "SourceId": "RedisAPI",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\faks\\cetvrta godina\\nbp\\rediproj\\RedisAPI\\wwwroot\\",
+      "BasePath": "_content/RedisAPI",
+      "RelativePath": "js/admin.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\admin.js"
     },
     {
       "Identity": "D:\\faks\\cetvrta godina\\nbp\\rediproj\\RedisAPI\\wwwroot\\js\\igrica.js",

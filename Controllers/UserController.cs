@@ -61,6 +61,11 @@ namespace RedisAPI.Controllers
                     var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
                     await HttpContext.SignInAsync(claimsPrincipal);
 
+                    if(korisnikPravi.Username == "Admin")
+                    {
+                        return StatusCode(202, "Admin Prijavljen");
+                    }
+
                     return Ok();
                 }
                 else
@@ -88,19 +93,6 @@ namespace RedisAPI.Controllers
         {
             _repo.unsubscribeAll();
 
-            return Ok(User.Identity.Name);
-        }
-
-        [Route("Posalji")]
-        [HttpGet]
-        public ActionResult posaljiNotifikaciju()
-        {
-            var username = User?.Identity?.Name;
-
-            Console.WriteLine(username + "nesto");
-
-            _repo.SendSaleNotificationsAsync();
-            
             return Ok(User.Identity.Name);
         }
 
@@ -138,6 +130,89 @@ namespace RedisAPI.Controllers
         public async Task<IActionResult> Odjavi()
         {
             await HttpContext.SignOutAsync();
+            return Ok();
+        }
+
+        [HttpGet("AdminStranica")]
+        public IActionResult AdminStranica()
+        {
+            
+            return View("Admin");
+        }
+
+        [HttpPost("DodajNovuIgricu/{naziv}/{cena}/{sale}/{novacena}")]
+        public IActionResult DodajNovuIgricu(string naziv, int cena, bool sale, int novacena)
+        {
+            var igra = new Igrica();
+
+            igra.Naziv = naziv;
+            igra.Cena = cena;
+            igra.onSale = sale;
+            igra.novaCena = novacena;
+
+            _context.Igrice.Add(igra);
+
+            _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [HttpPut("IzmeniIgricu/{id}/{naziv}/{cena}/{sale}/{novacena}")]
+        public IActionResult IzmeniIgricu(int id, string naziv, int cena, bool sale, int novacena)
+        {
+            var igra = _context.Igrice.Where(p => p.Id == id).FirstOrDefault();
+
+            igra.Naziv = naziv;
+            igra.Cena = cena;
+            igra.onSale = sale;
+            igra.novaCena = novacena;
+
+            _context.Igrice.Update(igra);
+
+            _context.SaveChanges();
+
+            return Ok();
+        }
+
+        [HttpDelete("IzbrisiIgricu/{id}")]
+        public IActionResult IzbrisiIgricu(int id)
+        {
+            var users = _context.Users.ToList();
+
+            foreach(var user in users)
+            {
+                var igrice = _context.Users.Where(p => p.Username == user.Username).Select(p => p.Wishlist).FirstOrDefault();
+
+                if(igrice != null)
+                {
+                    var listaIgrica = igrice.Split(';').ToList();
+
+                    if (listaIgrica.Contains(id.ToString()))
+                    {
+                        listaIgrica.Remove(id.ToString());
+
+                        var novaWishlist = string.Join(";", listaIgrica);
+
+                        user.Wishlist = novaWishlist;
+
+                        _context.Users.Update(user);
+                    }
+                }
+
+            }
+
+            if(_repo.izbrisiIgricu(id.ToString()) == false)
+            {
+                return BadRequest();
+            }
+
+            
+            var igra = _context.Igrice.Where(p => p.Id == id).FirstOrDefault();
+
+            _context.Igrice.Remove(igra);
+
+            _context.SaveChanges();
+
             return Ok();
         }
     }

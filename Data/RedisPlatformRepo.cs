@@ -53,7 +53,7 @@ namespace RedisAPI
                     _redis.GetSubscriber().Publish("id:" + id, $"{id}");//u tubu
                 
 
-                    db.HashSet("id:" + id, new HashEntry[] { new HashEntry("sale", $"{onSale}"), new HashEntry("novaCena", $"{novaCena}") } );
+                    db.HashSet("id:" + id, new HashEntry[] {new HashEntry("naziv", $"{naziv}"), new HashEntry("cena", $"{cena}"), new HashEntry("sale", $"{onSale}"), new HashEntry("novaCena", $"{novaCena}") } );
                     
                 }
                 else{//puni redis kes bazu
@@ -227,6 +227,19 @@ namespace RedisAPI
                 //id:1   1------------------- subscribe -->1
                 
                 //id:3   3-------------------- subscribe -->3
+        }
+
+        public bool izbrisiIgricu(string id)
+        {
+            IDatabase db = _redis.GetDatabase();
+
+            if(db.HashExists("id:" + id, "naziv"))
+            {
+                db.KeyDelete("id:" +id);
+                return true;
+            }
+
+            return false;
         }
     }
 }

@@ -16,6 +16,8 @@ namespace RedisAPI.Data
 
         void SendSaleNotificationsAsync();//ova
 
+        bool izbrisiIgricu(string id);
+
         bool postojiIgrica(string id, string username);
     }
 }

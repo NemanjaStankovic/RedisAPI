@@ -32,5 +32,13 @@ function login() {
             {
                 console.log("VEC JE LOGOVAN");
             }
+
+            if (response.status == 202) {
+                console.log("USPESNO");
+                setTimeout(function () {
+
+                    window.location = 'https://localhost:7051/User/AdminStranica';
+                }, 1000)
+            }
         }); 
 }
